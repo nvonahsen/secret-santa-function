@@ -43,6 +43,6 @@
             console.log(n)
             names.push(formData.get(`name${n}`))
         }
-        window.location += `/create?seed=${formData.get("seed")}&names=${names.join(',')}`;
+        window.location += `?seed=${formData.get("seed")}&names=${names.join(',')}`;
     })
 </script>
