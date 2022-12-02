@@ -25,11 +25,13 @@ def optima_encode(text_blocks: list[str], seed: str = "") -> str:
 
 
 def optima_decode(optima_string: str):
+    import logging
     all_bytes = base64.urlsafe_b64decode(optima_string)
     all_bits = bytes_to_bits(all_bytes)
 
     # drop pad bits
-    all_bits = all_bits[:-(len(all_bits) % 5)]
+    if (len(all_bits) % 5) != 0:
+        all_bits = all_bits[:-(len(all_bits) % 5)]
 
     # get optima string
     optima_ints = bits_to_optima(all_bits)
