@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!-- 
+  I'm lazy, this is a template for a slideshow that looked kinda good enough for me 
+  There's a pile of extra functionality in here that doesn't need to be
+  But just deleting the js breaks the style, and I'm not willing to put in any more effort than that :)
+-->
+
+<meta charset="utf-8">
+<title>Gift Exchange</title>
+
+<!-- Optional: on every page: header and footer -->
+<header>
+  Gift Exchange
+</header>
+
+<footer></footer>
+
+<!-- Your Slides -->
+<!-- One section is one slide -->
+<form id="form">
+    <label for="seed">Seed/Event name string: </label><input type="text" id="seed" name="seed"><br><br>
+    <ul id="names">
+        <li><label for="name1">You are: </label><input type="text" id="name1" name="name1"></li>
+    </ul>
+    <input type="button" value="Add another name" id="addname">
+    <input type="submit" value="Submit">
+</form>
+
+
+<script>
+    var url = "%func_url%"
+    var name_n = 1
+    document.getElementById("addname").onclick = () => {
+        name_n++
+        document.getElementById('names').innerHTML += 
+            `<li><label for=name${name_n}">Name ${name_n}: </label><input type="text" id="name${name_n}" name="name${name_n}"></li>`
+    }
+    document.getElementById("form").addEventListener('submit', (event) => {
+        const formData = new FormData(document.getElementById("form"));
+        event.preventDefault()
+        names = []
+        for (let n=1; n<=name_n; n++){
+            console.log(n)
+            names.push(formData.get(`name${n}`))
+        }
+        window.location += `/create?seed=${formData.get("seed")}&names=${names.join(',')}`;
+    })
+</script>
