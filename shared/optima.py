@@ -26,6 +26,7 @@ def optima_encode(text_blocks: list[str], seed: str = "") -> str:
 
 def optima_decode(optima_string: str):
     import logging
+    print(optima_string)
     all_bytes = base64.urlsafe_b64decode(optima_string)
     all_bits = bytes_to_bits(all_bytes)
 

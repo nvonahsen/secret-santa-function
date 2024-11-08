@@ -1,22 +1,22 @@
 import logging
 import json
 import random
-import azure.functions as func
+from flask import request
 from pathlib import Path
 from shared.optima import optima_encode
 
 home_html = Path('create/home-template.html').read_bytes()
 generated_html_string = Path('create/generated-template.html').read_text()
 
-def main(req: func.HttpRequest) -> func.HttpResponse:
+def main() -> str:
     logging.info('Python HTTP trigger function processed a request.')   
 
     # Give base page letting you create a new event on /create
-    if len(req.params) < 2:
-        return func.HttpResponse(home_html, mimetype="text/html")
+    if len(request.args) < 2:
+        return home_html
 
-    seed = req.params['seed']
-    names = req.params['names'].split(',')
+    seed = request.args['seed']
+    names = request.args['names'].split(',')
 
     assert len(list(set(names))) == len(names), "Duplicate names!!!"
 
@@ -34,9 +34,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     urls = dict()
     for me, target in assigned.items():
         encoded_arg = optima_encode([target, me], seed)
-        urls[me] = req.url.split("?")[0].replace('/create', f'/{encoded_arg}')
+        urls[me] = request.full_path.split("?")[0].replace('/create', f'/{encoded_arg}')
 
     data = json.dumps(urls)
-    return func.HttpResponse(
-        generated_html_string.replace('%LINKDATA%', data).encode("utf-8"), mimetype="text/html"
-    )
+    return generated_html_string.replace('%LINKDATA%', data).encode("utf-8")

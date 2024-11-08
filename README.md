@@ -1,7 +1,7 @@
 # secret-santa-function
 A serverless, databaseless, url-based implementation of secret santa
 
-It uses azure functions because that's what I find easiest to deploy on (plus its free for quite a few calls).
+This version uses google app engine as I had some stability problems with azure functions
 
 To start, hit the function url with no params, you'll get a basic UI to enter a list of names on.
 Hit enter and you'll redirect and get a list of names with links for each person that includes their target baked in to the URL.
