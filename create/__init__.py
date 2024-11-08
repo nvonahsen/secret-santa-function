@@ -6,6 +6,7 @@ from pathlib import Path
 from shared.optima import optima_encode
 
 home_html = Path('create/home-template.html').read_bytes()
+generated_html_string = Path('create/generated-template.html').read_text()
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')   
@@ -35,6 +36,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         encoded_arg = optima_encode([target, me], seed)
         urls[me] = req.url.split("?")[0].replace('/create', f'/{encoded_arg}')
 
+    data = json.dumps(urls)
     return func.HttpResponse(
-        json.dumps(urls, indent=4), mimetype="text/html"
+        generated_html_string.replace('%LINKDATA%', data).encode("utf-8"), mimetype="text/html"
     )

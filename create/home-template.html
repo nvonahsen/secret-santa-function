@@ -1,48 +1,282 @@
 <!DOCTYPE html>
-<!-- 
-  I'm lazy, this is a template for a slideshow that looked kinda good enough for me 
-  There's a pile of extra functionality in here that doesn't need to be
-  But just deleting the js breaks the style, and I'm not willing to put in any more effort than that :)
--->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift Exchange</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-<meta charset="utf-8">
-<title>Gift Exchange</title>
-
-<!-- Optional: on every page: header and footer -->
-<header>
-  Gift Exchange
-</header>
-
-<footer></footer>
-
-<!-- Your Slides -->
-<!-- One section is one slide -->
-<form id="form">
-    <label for="seed">Seed/Event name string: </label><input type="text" id="seed" name="seed"><br><br>
-    <ul id="names">
-        <li><label for="name1">You are: </label><input type="text" id="name1" name="name1"></li>
-    </ul>
-    <input type="button" value="Add another name" id="addname">
-    <input type="submit" value="Submit">
-</form>
-
-
-<script>
-    var url = "%func_url%"
-    var name_n = 1
-    document.getElementById("addname").onclick = () => {
-        name_n++
-        document.getElementById('names').innerHTML += 
-            `<li><label for=name${name_n}">Name ${name_n}: </label><input type="text" id="name${name_n}" name="name${name_n}"></li>`
-    }
-    document.getElementById("form").addEventListener('submit', (event) => {
-        const formData = new FormData(document.getElementById("form"));
-        event.preventDefault()
-        names = []
-        for (let n=1; n<=name_n; n++){
-            console.log(n)
-            names.push(formData.get(`name${n}`))
+        :root {
+            --primary: #ff3366;
+            --secondary: #4f46e5;
+            --accent: #0ea5e9;
         }
-        window.location += `?seed=${formData.get("seed")}&names=${names.join(',')}`;
-    })
-</script>
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .card {
+            backdrop-filter: blur(16px) saturate(180%);
+            background-color: rgba(255, 255, 255, 0.75);
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.125);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.47);
+        }
+
+        .header-gradient {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 2rem;
+            border-radius: 1rem 1rem 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.1) 48%, rgba(255,255,255,0.1) 52%, transparent 55%);
+            animation: shine 3s infinite;
+            background-size: 200% 200%;
+        }
+
+        @keyframes shine {
+            0% { background-position: 200% 200%; }
+            100% { background-position: -200% -200%; }
+        }
+
+        .form-control {
+            border-radius: 0.75rem;
+            border: 2px solid rgba(255, 255, 255, 0.125);
+            background: rgba(255, 255, 255, 0.85);
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
+            border-color: var(--secondary);
+            background: white;
+        }
+
+        .btn {
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            color: white;
+        }
+
+        .btn-outline-primary {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .gift-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .name-input-group {
+            opacity: 0;
+            animation: fadeSlideUp 0.5s ease forwards;
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .remove-btn {
+            color: var(--primary);
+            border: none;
+            background: transparent;
+            padding: 0.5rem;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .remove-btn:hover {
+            color: #ff1744;
+            transform: rotate(90deg);
+        }
+
+        .shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shimmer::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to right,
+                rgba(255,255,255,0) 0%,
+                rgba(255,255,255,0.3) 50%,
+                rgba(255,255,255,0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
+        }
+    </style>
+</head>
+<body class="d-flex align-items-center justify-content-center p-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <!-- Header -->
+                    <div class="header-gradient text-center text-white mb-4">
+                        <h1 class="display-6 fw-bold mb-0">
+                            <i class="fas fa-gift me-2 gift-icon"></i>
+                            Gift Exchange
+                        </h1>
+                    </div>
+
+                    <!-- Form -->
+                    <form id="form" class="p-4">
+                        <div class="mb-4">
+                            <label for="seed" class="form-label fw-bold">
+                                <i class="fas fa-magic me-2"></i>
+                                Seed/Event name string:
+                            </label>
+                            <input type="text" id="seed" name="seed" 
+                                class="form-control shimmer"
+                                placeholder="e.g., Christmas 2024">
+                        </div>
+
+                        <div id="names-container" class="mb-4">
+                            <div class="name-input-group mb-3">
+                                <label for="name1" class="form-label fw-bold">
+                                    <i class="fas fa-user me-2"></i>
+                                    You are:
+                                </label>
+                                <div class="input-group">
+                                    <input type="text" id="name1" name="name1"
+                                        class="form-control shimmer"
+                                        placeholder="Enter your name">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-between">
+                            <button type="button" id="addname" class="btn btn-outline-primary">
+                                <i class="fas fa-user-plus me-2"></i>
+                                Add another name
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i>
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let nameCount = 1;
+
+        document.getElementById("addname").addEventListener("click", () => {
+            nameCount++;
+            const container = document.getElementById("names-container");
+            
+            const nameDiv = document.createElement("div");
+            nameDiv.className = "name-input-group mb-3";
+            nameDiv.innerHTML = `
+                <label for="name${nameCount}" class="form-label fw-bold">
+                    <i class="fas fa-user me-2"></i>
+                    Name ${nameCount}:
+                </label>
+                <div class="input-group">
+                    <input type="text" id="name${nameCount}" name="name${nameCount}"
+                        class="form-control shimmer"
+                        placeholder="Enter name">
+                    <button type="button" onclick="removeName(this)" 
+                        class="remove-btn">
+                        <i class="fas fa-times-circle"></i>
+                    </button>
+                </div>
+            `;
+            
+            container.appendChild(nameDiv);
+        });
+
+        function removeName(button) {
+            button.closest(".name-input-group").remove();
+        }
+
+        document.getElementById("form").addEventListener("submit", (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const names = [];
+            
+            for (let pair of formData.entries()) {
+                if (pair[0].startsWith("name") && pair[1].trim()) {
+                    names.push(pair[1].trim());
+                }
+            }
+
+            const seed = formData.get("seed");
+            window.location += `?seed=${seed}&names=${names.join(",")}`;
+        });
+    </script>
+</body>
+</html>
