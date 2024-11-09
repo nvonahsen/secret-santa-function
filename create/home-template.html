@@ -195,11 +195,12 @@
                         <div class="mb-4">
                             <label for="seed" class="form-label fw-bold">
                                 <i class="fas fa-magic me-2"></i>
-                                Seed/Event name string:
+                                Seed/Event name string (letters spaces and -, ', &, ~ only)::
                             </label>
                             <input type="text" id="seed" name="seed" 
                                 class="form-control shimmer"
-                                placeholder="e.g., Christmas 2024">
+                                pattern="^[A-Za-z -'&~]+$"
+                                placeholder="e.g., xmas twenty four">
                         </div>
 
                         <div id="names-container" class="mb-4">
@@ -211,6 +212,7 @@
                                 <div class="input-group">
                                     <input type="text" id="name1" name="name1"
                                         class="form-control shimmer"
+                                        pattern="^[A-Za-z -'&~]+$"
                                         placeholder="Enter your name">
                                 </div>
                             </div>
