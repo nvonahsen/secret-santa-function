@@ -4,6 +4,10 @@ from decode import main as decode
 
 app = Flask(__name__)
 
+@app.route('/')
+def _home():
+    return create()
+
 @app.route('/create')
 def _create():
     return create()
