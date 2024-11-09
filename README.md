@@ -2,12 +2,16 @@
 A stateless, databaseless, url-based implementation of secret santa
 
 **Now deployed at [santa.nics.work](https://santa.nics.work)**
+> The price limit is hard-coded to $50 right now (I really just use this for my family so I just change it when needed)
 
 This version uses google app engine as I had some stability problems with azure functions (most likely due to cold starting). Azure functions version is still available at branch [release/azure-functions](nvonahsen/secret-santa-function/tree/release/azure-functions) though I may forget to update it at some point.
 
 To start, hit '/' or '/create'
 Use to UI to enter a list of names and generate links for each person that includes their target baked in to the URL.
 Now you can send those links to whoever you want and they just need to click it.
+
+## Future
+I make a few upgrades to this app every now and again when a holiday comes around, so will probably fix the price limit next time. I wanna allow numbers in the seed as well, but still keep the URLs short, so I'll do some investigating on optimising the encoding, maybe something based on UTF to allow 3-bit common letters? I might also give up and just make the app start writing things to disk, though that means I need to start thinking about security and stuff which is a pain...
 
 ## Deploying your own
 (if you're new to google cloud)
@@ -27,3 +31,4 @@ If you change the requirements you'll need to generate requirements.txt *(GCP us
 `poetry export --without-hashes --format=requirements.txt > requirements.txt`
 
 `start-windows.ps1` should allow you to run the app locally on a windows pc which I happend to dev this on. If you're running on linux/mac you should be able to `poetry run flask --app main run` since flask can run itself on these operating systems (windows need an extra layer to actually run it, in this case "waitress")
+
