@@ -1,12 +1,16 @@
-# secret-santa-function
-A serverless, databaseless, url-based implementation of secret santa
+# Stateless secret santa
+A stateless, databaseless, url-based implementation of secret santa
 
 It uses azure functions because that's what I find easiest to deploy on (plus its free for quite a few calls).
 
-To start, hit the function url with no params, you'll get a basic UI to enter a list of names on.
-Hit enter and you'll redirect and get a list of names with links for each person that includes their target baked in to the URL.
+**Now deployed (on google app engine, from main) at [santa.nics.work](santa.nics.work)**
+
+
+This version uses google app engine as I had some stability problems with azure functions (most likely due to cold starting). Azure functions version is still available at branch [release/azure-functions](nvonahsen/secret-santa-function/tree/release/azure-functions) though I may forget to update it at some point.
+
+To start, hit '/' or '/create'
+Use to UI to enter a list of names and generate links for each person that includes their target baked in to the URL.
 Now you can send those links to whoever you want and they just need to click it.
-The UI for the clicked link is slightly higher effort to make it easy for even older people to understand.
 
 Generate requirements.txt
 `poetry export --without-hashes --format=requirements.txt > requirements.txt`
