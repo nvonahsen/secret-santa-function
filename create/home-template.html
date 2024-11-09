@@ -195,7 +195,9 @@
                         <div class="mb-4">
                             <label for="seed" class="form-label fw-bold">
                                 <i class="fas fa-magic me-2"></i>
-                                Seed/Event name string (letters spaces and -, ', &, ~ only)::
+                                Seed/Event name:
+                                <br height="1px" />
+                                <small class="text-muted" style="font-size: 0.7rem;">The same seed + same people will always give the same results (Only letters, spaces and -'&~)</small>
                             </label>
                             <input type="text" id="seed" name="seed" 
                                 class="form-control shimmer"
@@ -203,6 +205,19 @@
                                 placeholder="e.g., xmas twenty four">
                         </div>
 
+                        <div class="mb-4">
+                            <label for="seed" class="form-label fw-bold">
+                                <i class="fas fa-ellipsis me-2"></i>
+                                Randomly pad with up to:
+                                <br/>
+                                <small class="text-muted" style="font-size: 0.7rem;">Randomly adds letters to the URL. Increase it if someone has a very long name, otherwise their URL is obviously longer.</small>
+                            </label>
+                            <input type="text" id="seed" name="padding" 
+                                class="form-control shimmer"
+                                pattern="^[0-9]+$"
+                                value=3>
+                        </div>
+                        <hr class="my-4">
                         <div id="names-container" class="mb-4">
                             <div class="name-input-group mb-3">
                                 <label for="name1" class="form-label fw-bold">
@@ -278,7 +293,7 @@
             }
 
             const seed = formData.get("seed");
-            window.location += `?seed=${seed}&names=${names.join(",")}`;
+            window.location += `?seed=${seed}&padding=${padding}&names=${names.join(",")}`;
         });
     </script>
 </body>

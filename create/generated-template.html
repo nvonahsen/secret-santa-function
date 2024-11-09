@@ -179,7 +179,6 @@
 
         var data = JSON.parse('%LINKDATA%');
         Object.entries(data).forEach(([name, link], index) => {
-            const path = `${window.location.host}${link}`;
             const newElement = document.createElement('div');
             newElement.className = 'link-card';
             newElement.style.setProperty('--animation-order', index);
@@ -190,11 +189,11 @@
                 </div>
                 <div class="d-flex gap-3 align-items-start">
                     <div class="link-container flex-grow-1">
-                        <a href="${path}" id="name${name}" target="_blank">
-                            ${path}
+                        <a href="${link}" id="name${name}" target="_blank">
+                            ${link}
                         </a>
                     </div>
-                    <button onclick="copyToClipboard('${path}')" class="copy-btn" title="Copy link">
+                    <button onclick="copyToClipboard('${link}')" class="copy-btn" title="Copy link">
                         <i class="fas fa-copy"></i>
                     </button>
                 </div>
